@@ -66,7 +66,6 @@ namespace seeshark
             miniBox.Add(picMini4);
             miniBox.Add(picMini5);
         }
-
         private void openFile()                 //filedialog aufmachen und die vorschau boxen befüllen
         {
             ofd.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
@@ -80,7 +79,7 @@ namespace seeshark
                         delBoxes[i].Visibility = Visibility.Visible;                        //löschen und neu laden symbol einbleden
                         editBoxes[i].Visibility = Visibility.Visible;
                         fileName.Add(ofd.FileName);                                         //filename in Liste 
-                        //break;                                                              //break um verschiedene Bilder zu laden        
+                        break;                                                              //break um verschiedene Bilder zu laden     AUSKOMMENTIEREN um schneller Testen zu können (HURRAAAA!!! Zeitsparen)
                     }
                 }
             }
@@ -159,7 +158,7 @@ namespace seeshark
                 }
 
 
-                if (txtName.Text.Length > 0)                                                                             //Titel muss angegeben werden
+                if (txtName.Text.Length > 0)                                                                     //Titel muss angegeben werden
                 {
                     SqlParameter toAdd = new SqlParameter("@Text1", SqlDbType.NVarChar);                            //Parameter für Titel
                     toAdd.Value = txtName.Text;
@@ -178,16 +177,16 @@ namespace seeshark
             finally
             {
                 myConnection.Close();                                                                               //connection wird geschlossen
-                if (error == false)
+                if (error == false)                                                                                 //Wenn man es hier vorbei schafft wird ausgegeben das geuploaded wurde
                 {
-                    MessageBox.Show("Daten wurden hochgeladen");                                                    //nur wenn kein error wird msgbox ausgegeben (HURRAAAA!!!!!)
+                    MessageBox.Show("Daten wurden hochgeladen");                                                    //HURRRAAAAAA!!! hier freuen wir uns
                 }
                 deleteAll();                                                                                        //alles löschen und aufräumen das UI wieder leer ist
                 lstPrmtr.Clear();                                                                                   //Parameterliste löschen
             }
 
         }
-        private void editFile()                 //funktion um Daten die wasLoaded=true sind zu bearbeiten
+        private void editFile()                                         //funktion um Daten die wasLoaded=true sind zu bearbeiten
         {
             SqlConnection myConnection = new SqlConnection(connectionString);
             SqlCommand myCommand = new SqlCommand();
@@ -316,12 +315,12 @@ namespace seeshark
                 }
             }
         }
-        private void clickList(string selected)
+        private void clickList(string selected)                         //funktion um in listview clicken zu können und daten in vorschau zu bekommen
         {
-            if (lstAllData.SelectedItems.Count > 0)
+            if (lstAllData.SelectedItems.Count > 0)                     //nur wenn was ausgewählt wurde
             {
-                deleteAll();
-                SqlConnection myConnection = new SqlConnection(connectionString);
+                deleteAll();                                            //alles leeren
+                SqlConnection myConnection = new SqlConnection(connectionString);       //SQL connection mit Reader
                 SqlCommand myCommand = new SqlCommand();
                 myConnection.Open();
                 SqlDataReader myReader = null;
@@ -331,14 +330,14 @@ namespace seeshark
 
                     myCommand.Connection = myConnection;
                     myCommand.CommandType = CommandType.StoredProcedure;
-                    myCommand.CommandText = "dbo.getData";
+                    myCommand.CommandText = "dbo.getData";                                          //Proc name
                     SqlParameter search = new SqlParameter("@text", SqlDbType.NVarChar);
-                    search.Value = selected;
+                    search.Value = selected;                                                        //value wird übergeben
                     myCommand.Parameters.Add(search);
                     myReader = myCommand.ExecuteReader();
                     myReader.Read();
-                    lblID.Content = myReader[0].ToString();
-                    for (int i = 1; i < 7; i++)
+                    lblID.Content = myReader[0].ToString();                                         //ID wird ins Label geschrieben
+                    for (int i = 1; i < 7; i++)                                                     //Bilder werden gesetzt
                     {
                         if (myReader[i] != System.DBNull.Value)
                         {
@@ -351,7 +350,7 @@ namespace seeshark
                             miniBox[i - 1].Visibility = Visibility.Visible;
                         }
                     }
-                    txtName.Text = myReader[7].ToString();
+                    txtName.Text = myReader[7].ToString();                                          //Text wird gesetzt
                 }
                 catch (Exception ex)
                 {
@@ -361,7 +360,7 @@ namespace seeshark
                 {
                     myConnection.Close();
                     myReader.Close();
-                    wasLoaded = true;
+                    wasLoaded = true;                                                               //was loaded true setzen
                 }
             }
         }
@@ -379,7 +378,7 @@ namespace seeshark
                     myCommand.CommandType = CommandType.StoredProcedure;
                     myCommand.CommandText = "dbo.deleteData";
                     SqlParameter search = new SqlParameter("@ID", SqlDbType.Int);              //paremeter ID wird 
-                    search.Value = lblID.Content;                                                      //vom lbl mit der ID genommen
+                    search.Value = lblID.Content;                                              //vom lbl mit der ID genommen
                     myCommand.Parameters.Add(search);
                     myCommand.ExecuteNonQuery();
                 }
@@ -403,20 +402,18 @@ namespace seeshark
             }
 
         }
-        private void openEdited()
+        private void openEdited()                                       //funktion das lstCHanged befüllt wird wenn man files öffnet
         {
             int count = 0;
-            if (wasLoaded == true)
+            foreach (var img in miniBox)
             {
-                foreach (var img in miniBox)
-                {
-                    if (img.Source != null)
-                        count++;
-                }
-                lstChanged.Add(count);
+                if (img.Source != null)                                 //Zählen wenn bild vorhanden ist
+                    count++;
             }
+            lstChanged.Add(count);                                      //liste befüllen mit zähler das richtiges bild geladen wird
+
         }
-        private void searchFile()
+        private void searchFile()                                               //funktion zum suchen über namen
         {
             deleteAll();
             SqlConnection myConnection = new SqlConnection(connectionString);                       //SQL connection mit Reader 
@@ -458,14 +455,20 @@ namespace seeshark
                 wasLoaded = true;                                                                   //wasloaded true setzen damit beim speichern editiert wird
             }
         }
-
+        private void zoomPic(int number)
+        {
+            picZoom.Source = miniBox[number].Source;
+        }
 
         //##########################################################################
         //#############################CLICKEVENTS##################################
         //##########################################################################
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
-            openEdited();
+            if (wasLoaded == true)
+            {
+                openEdited();
+            }
             openFile();
         }
 
@@ -588,6 +591,36 @@ namespace seeshark
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             searchFile();
+        }
+
+        private void picMini0_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            zoomPic(0);
+        }
+
+        private void picMini1_mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            zoomPic(1);
+        }
+
+        private void picMini2_mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            zoomPic(2);
+        }
+
+        private void picMini3_mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            zoomPic(3);
+        }
+
+        private void picMini4_mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            zoomPic(4);
+        }
+
+        private void picMini5_mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            zoomPic(5);
         }
     }
 }

@@ -46,12 +46,12 @@
         <TextBox x:Name="txtName" Grid.Column="4" Grid.Row="2" Grid.ColumnSpan="2" Height="23" Width="240" HorizontalAlignment="Left"/>
         <TextBox x:Name="txtConnect" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" Height="23" Width="240" HorizontalAlignment="Left" Text="EDVSR19-02\DAVIDSERVER"/>
         <TextBox x:Name="txtSearch" Grid.Column="8" Grid.Row="1" Height="23" Width="275" HorizontalAlignment="Center"/>
-        <Image x:Name="picMini0" Grid.Row="3" Grid.Column="1" Height="90" Width="90" Margin="25"/>
-        <Image x:Name="picMini1" Grid.Row="3" Grid.Column="2" Height="90" Width="90" Margin="25"/>
-        <Image x:Name="picMini2" Grid.Row="3" Grid.Column="3" Height="90" Width="90" Margin="25"/>
-        <Image x:Name="picMini3" Grid.Row="3" Grid.Column="4" Height="90" Width="90" Margin="25"/>
-        <Image x:Name="picMini4" Grid.Row="3" Grid.Column="5" Height="90" Width="90" Margin="25"/>
-        <Image x:Name="picMini5" Grid.Row="3" Grid.Column="6" Height="90" Width="90" Margin="25"/>
+        <Image x:Name="picMini0" Grid.Row="3" Grid.Column="1" Height="90" Width="90" Margin="25" MouseDown="picMini0_MouseDown"/>
+        <Image x:Name="picMini1" Grid.Row="3" Grid.Column="2" Height="90" Width="90" Margin="25" MouseDown="picMini1_mouseDown"/>
+        <Image x:Name="picMini2" Grid.Row="3" Grid.Column="3" Height="90" Width="90" Margin="25" MouseDown="picMini2_mouseDown"/>
+        <Image x:Name="picMini3" Grid.Row="3" Grid.Column="4" Height="90" Width="90" Margin="25" MouseDown="picMini3_mouseDown"/>
+        <Image x:Name="picMini4" Grid.Row="3" Grid.Column="5" Height="90" Width="90" Margin="25" MouseDown="picMini4_mouseDown"/>
+        <Image x:Name="picMini5" Grid.Row="3" Grid.Column="6" Height="90" Width="90" Margin="25" MouseDown="picMini5_mouseDown"/>
         <Image x:Name="picDel0" Grid.Row="3" Grid.Column="1" Height="15" Width="15" Source="redX.png" Margin="0,100,25,0" Visibility="Hidden" MouseDown="picdel0_mouseDown"/>
         <Image x:Name="picDel1" Grid.Row="3" Grid.Column="2" Height="15" Width="15" Source="redX.png" Margin="0,100,25,0" Visibility="Hidden" MouseDown="picdel1_mouseDown"/>
         <Image x:Name="picDel2" Grid.Row="3" Grid.Column="3" Height="15" Width="15" Source="redX.png" Margin="0,100,25,0" Visibility="Hidden" MouseDown="picdel2_mouseDown"/>
