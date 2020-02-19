@@ -1,4 +1,14 @@
-﻿using Microsoft.Win32;
+﻿//############################################################################################################################
+//########?Was?######SQL Foto Datenbank#######################################################################################
+//########?Name?#####See Shark################################################################################################
+//########?Author?###David D'Orazio###########################################################################################
+//############################################################################################################################
+//########In diesem Programm ist es möglich Fotos in einer SQL DatenBank zu speichern#########################################
+//########Fotos werden in Binärstring-Arrays gespeichert######################################################################
+//########Fotos werden aus der SQL Datenbank Binär ausgelesen und wieder konvertiert##########################################
+//############################################################################################################################
+
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -62,7 +72,7 @@ namespace seeshark
             ofd.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
             if (ofd.ShowDialog() == true)                                                  //wenn ofd erfolgreich ausgeführt wurde und ausgewählt
             {
-                for (int i = 0; i < 5; i++)                                                 //loop um alle 6 bilderboxen befüllen zu können
+                for (int i = 0; i <= 5; i++)                                                 //loop um alle 6 bilderboxen befüllen zu können
                 {
                     if (miniBox[i].Source == null)                                          //nach leerer Minibox suchen
                     {
@@ -70,12 +80,12 @@ namespace seeshark
                         delBoxes[i].Visibility = Visibility.Visible;                        //löschen und neu laden symbol einbleden
                         editBoxes[i].Visibility = Visibility.Visible;
                         fileName.Add(ofd.FileName);                                         //filename in Liste 
-                        break;                                                              //break um verschiedene Bilder zu laden        
+                        //break;                                                              //break um verschiedene Bilder zu laden        
                     }
                 }
             }
         }
-        private void loadAll()
+        private void loadAll()                  //Funktion um alle Daten aus SQL in die Liste zu laden
         {
             SqlConnection myConnection = new SqlConnection(connectionString);
             SqlCommand myCommand = new SqlCommand();
@@ -89,7 +99,7 @@ namespace seeshark
                 myReader = myCommand.ExecuteReader();
                 while (myReader.Read())                                                         //solange gelesen wird
                 {
-                    ListViewItem item = new ListViewItem();               //werden werte in die Liste
+                    ListViewItem item = new ListViewItem();                                     //werden werte in die Liste
                     item.Content = myReader[0].ToString();
                     this.lstAllData.Items.Add(item);                                            //hinzugefügt
                 }
@@ -103,7 +113,7 @@ namespace seeshark
                 myConnection.Close();                                                           //verbindung und reader werden geschlossen
                 myReader.Close();
             }
-        }               //Liste wird geladen       
+        }
         private void deleteAll()                //ALLES Löschen und Bilder verstecken
         {
             lblID.Content = "00";
@@ -112,17 +122,17 @@ namespace seeshark
             wasLoaded = false;
             foreach (var image in miniBox)
                 image.Source = null;
-            
+
 
             foreach (var delbox in delBoxes)
                 delbox.Visibility = Visibility.Collapsed;
-            
-            foreach(var editbox in editBoxes)
+
+            foreach (var editbox in editBoxes)
                 editbox.Visibility = Visibility.Collapsed;
-            
+
             fileName.Clear();
         }
-        private void uploadFile()                                       //Datensatz auf Server Laden
+        private void uploadFile()               //Datensatz auf Server Laden
         {
             SqlConnection myConnection = new SqlConnection(connectionString);
             SqlCommand myCommand = new SqlCommand();
@@ -134,7 +144,7 @@ namespace seeshark
                 myCommand.Connection = myConnection;
                 myCommand.CommandType = CommandType.StoredProcedure;
                 myCommand.CommandText = "dbo.addData";
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i <= 5; i++)
                 {
                     if (miniBox[i].Source != null)
                     {                                                                                            //Bild konvertieren
@@ -177,7 +187,7 @@ namespace seeshark
             }
 
         }
-        private void editFile()
+        private void editFile()                 //funktion um Daten die wasLoaded=true sind zu bearbeiten
         {
             SqlConnection myConnection = new SqlConnection(connectionString);
             SqlCommand myCommand = new SqlCommand();
@@ -235,7 +245,7 @@ namespace seeshark
                 wasLoaded = false;
             }
         }
-        private BitmapImage ConvertBinaryToImage(byte[] data)                     //funktion um binary aus SQL zu bild datein zu konvertieren
+        private BitmapImage ConvertBinaryToImage(byte[] data)           //funktion um binary aus SQL zu bild datein zu konvertieren
         {
             using (var ms = new MemoryStream(data))                //memorystream liest byte und returned Image
             {
@@ -259,7 +269,7 @@ namespace seeshark
             SqlConnection myConnection = new SqlConnection(connectionString);
             SqlCommand myCommand = new SqlCommand();
             myConnection.Open();
-            if (lstChanged.Contains(number))           //Liste wird abgearbeitet und die Zahl des Bildes gelöscht
+            if (lstChanged.Contains(number))                                                        //Liste wird abgearbeitet und die Zahl des Bildes gelöscht
             {
                 lstChanged.Remove(number);
             }
@@ -268,10 +278,10 @@ namespace seeshark
                 myCommand.Connection = myConnection;
                 myCommand.CommandType = CommandType.StoredProcedure;
                 myCommand.CommandText = "dbo.deletePic";
-                SqlParameter addID = new SqlParameter("@ID", SqlDbType.Int);                //Bild mit ID identifizieren
+                SqlParameter addID = new SqlParameter("@ID", SqlDbType.Int);                        //Bild mit ID identifizieren
                 addID.Value = lblID.Content;
-                SqlParameter deletePic = new SqlParameter("@Number", SqlDbType.Int);        //Bild über Nummer ansprechen
-                deletePic.Value = number;                                                      //value ist die Nummer
+                SqlParameter deletePic = new SqlParameter("@Number", SqlDbType.Int);                //Bild über Nummer ansprechen
+                deletePic.Value = number;                                                           //value ist die Nummer
                 myCommand.Parameters.Add(addID);
                 myCommand.Parameters.Add(deletePic);
                 myCommand.ExecuteNonQuery();
@@ -283,28 +293,23 @@ namespace seeshark
             finally
             {
                 myConnection.Close();
-                miniBox[number].Visibility = Visibility.Collapsed;
             }
         }
-        private void shiftPics(int number)
+        private void shiftPics(int number)                              //Funktion zum nachschieben wenn Bilder gelöscht werden
         {
             lstChanged.Add(number);
-            if (miniBox[1].Source == null && miniBox[2].Source == null && miniBox[3].Source == null && miniBox[4].Source == null && miniBox[5].Source == null)
-            {
-                miniBox[0].Visibility = Visibility.Collapsed;
-            }
-            for (int i = 5; i > number; i--)
+            for (int i = 5; i >= number; i--)
             {
                 if (miniBox[i].Source != null)
                 {
                     miniBox[i - 1].Source = miniBox[i].Source;
-                    miniBox[i].Visibility = Visibility.Collapsed; ;
+                    miniBox[i].Source = null;
                     break;
                 }
             }
             for (int i = 5; i >= number; i--)
             {
-                if (miniBox[i].Visibility == Visibility.Collapsed)
+                if (miniBox[i].Source == null)
                 {
                     delBoxes[i].Visibility = Visibility.Collapsed;
                     editBoxes[i].Visibility = Visibility.Collapsed;
@@ -343,6 +348,7 @@ namespace seeshark
                             miniBox[i - 1].Source = bitToAdd.Source;
                             delBoxes[i - 1].Visibility = Visibility.Visible;
                             editBoxes[i - 1].Visibility = Visibility.Visible;
+                            miniBox[i - 1].Visibility = Visibility.Visible;
                         }
                     }
                     txtName.Text = myReader[7].ToString();
@@ -402,21 +408,56 @@ namespace seeshark
             int count = 0;
             if (wasLoaded == true)
             {
-                for (int i = 0; i < 6; i++)
+                foreach (var img in miniBox)
                 {
-                    if (miniBox[i].Visibility != Visibility.Collapsed)
+                    if (img.Source != null)
                         count++;
                 }
-                lstChanged.Add(count+1);
+                lstChanged.Add(count);
             }
         }
-
-
-
-
-
-
-
+        private void searchFile()
+        {
+            deleteAll();
+            SqlConnection myConnection = new SqlConnection(connectionString);                       //SQL connection mit Reader 
+            SqlCommand myCommand = new SqlCommand();
+            myConnection.Open();
+            SqlDataReader myReader = null;
+            try
+            {
+                myCommand.Connection = myConnection;
+                myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.CommandText = "dbo.getData";
+                SqlParameter search = new SqlParameter("@text", SqlDbType.NVarChar);                //parameter text wird übernommen
+                search.Value = txtSearch.Text;
+                myCommand.Parameters.Add(search);
+                myReader = myCommand.ExecuteReader();
+                myReader.Read();
+                lblID.Content = myReader[0].ToString();                                             //ID nummer pos[0] wird gesetzt
+                for (int i = 1; i <= 6; i++)                                                         //pos[1] bis pos[7] wird mit Bilder gesetzt
+                {
+                    if (myReader[i] != System.DBNull.Value)                                         //wenn kein Wert geladen wird wird nicht befüllt
+                    {
+                        byte[] myBytes = (byte[])myReader[i];
+                        Image bitToAdd = new Image();
+                        bitToAdd.Source = (ConvertBinaryToImage((byte[])myReader[i]));              //bitmap wird erstellt und mit funktion konvertiert
+                        miniBox[i - 1].Source = bitToAdd.Source;                                        //kleine vorschau boxen werden befüllt
+                        delBoxes[i - 1].Visibility = Visibility.Visible;                                 //löschenbild und editieren bild wird eingeblendet
+                        editBoxes[i - 1].Visibility = Visibility.Visible;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                myConnection.Close();                                                               //connection schließen
+                myReader.Close();
+                wasLoaded = true;                                                                   //wasloaded true setzen damit beim speichern editiert wird
+            }
+        }
 
 
         //##########################################################################
@@ -530,20 +571,23 @@ namespace seeshark
             lstAllData.Items.Clear();       //liste wird gelöscht und neu geladen mit neuem / editiertem beitrag
             loadAll();
         }
-
-        private void lstAllData_clicked(object sender, MouseButtonEventArgs e)
-        {
-           
-            if (((ContentControl)e.Source).Content.ToString() != null)                                 //ERROR ABFANGEN
-            {
-                String test = ((ContentControl)e.Source).Content.ToString();            //string auslesen aus der liste
-                clickList(test);
-            } 
-        }
-
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             deleteFile();
+        }
+
+        private void lstAllData_clicked(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstAllData.SelectedIndex >= 0)
+            {
+                clickList(((ListViewItem)((ListView)sender).SelectedItem).Content.ToString());
+            }
+
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            searchFile();
         }
     }
 }

@@ -9,12 +9,12 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="auto" MinWidth="132"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto" MinWidth="140"/>
+            <ColumnDefinition Width="auto" MinWidth="140"/>
+            <ColumnDefinition Width="auto" MinWidth="140"/>
+            <ColumnDefinition Width="auto" MinWidth="140"/>
+            <ColumnDefinition Width="auto" MinWidth="140"/>
+            <ColumnDefinition Width="auto" MinWidth="140"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="20"/>
@@ -29,7 +29,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Height="50" Width="90" Source="shark.png" Stretch="Fill"></Image>    
+        <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Height="50" Width="90" Source="shark.png" Stretch="Fill"></Image>
         <TextBlock Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" FontSize="23pt" FontFamily="OCR A Extended" Margin="10">
             See Shark
         </TextBlock>
@@ -65,6 +65,6 @@
         <Image x:Name="picEdit4" Grid.Row="3" Grid.Column="5" Height="15" Width="15" Source="open.png" Margin="25,100,0,0" Visibility="Hidden" MouseDown="picEdit4_mouseDown"/>
         <Image x:Name="picEdit5" Grid.Row="3" Grid.Column="6" Height="15" Width="15" Source="open.png" Margin="25,100,0,0" Visibility="Hidden" MouseDown="picEdit5_MouseDown"/>
         <Image x:Name="picZoom" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="6" Height="650" Width="650" Margin="20" Source="shark.png"/>
-        <ListView x:Name="lstAllData" Grid.Row="3" Grid.Column="8" Grid.RowSpan="2" Width="275" Margin="25,0,25,25" Height="780" VerticalAlignment="Bottom" PreviewMouseLeftButtonDown="lstAllData_clicked"/>
+        <ListView x:Name="lstAllData" Grid.Row="3" Grid.Column="8" Grid.RowSpan="2" Width="275" Margin="25,0,25,25" Height="780" VerticalAlignment="Bottom" SelectionChanged="lstAllData_clicked"/>
     </Grid>
 </Window>
