@@ -103,5 +103,8 @@
   <ItemGroup>
     <Resource Include="open.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="finne_5NJ_icon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

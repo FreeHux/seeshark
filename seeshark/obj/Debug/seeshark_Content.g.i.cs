@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("open.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("finne_5nj_icon.ico")]
 
 

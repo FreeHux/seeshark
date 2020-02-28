@@ -40,7 +40,7 @@ namespace seeshark
         public List<int> lstChanged = new List<int>();
         public string connectionString = null;
         public bool wasLoaded { get; set; }                                 //bool das ein datensatz geladen wurde, um zwei funktionen auf einen knopf egen zu können
-
+        public bool deleted { get; set; }                                   //bool falls deleted
 
         //##########################################################################
         //########################FUNKTIONEN########################################
@@ -121,11 +121,8 @@ namespace seeshark
             wasLoaded = false;
             foreach (var image in miniBox)
                 image.Source = null;
-
-
             foreach (var delbox in delBoxes)
                 delbox.Visibility = Visibility.Collapsed;
-
             foreach (var editbox in editBoxes)
                 editbox.Visibility = Visibility.Collapsed;
 
@@ -246,7 +243,7 @@ namespace seeshark
         }
         private BitmapImage ConvertBinaryToImage(byte[] data)           //funktion um binary aus SQL zu bild datein zu konvertieren
         {
-            using (var ms = new MemoryStream(data))                //memorystream liest byte und returned Image
+            using (var ms = new MemoryStream(data))                     //memorystream liest byte und returned Image
             {
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
@@ -292,6 +289,7 @@ namespace seeshark
             finally
             {
                 myConnection.Close();
+                deleted = true;
             }
         }
         private void shiftPics(int number)                              //Funktion zum nachschieben wenn Bilder gelöscht werden
@@ -460,6 +458,8 @@ namespace seeshark
             picZoom.Source = miniBox[number].Source;
         }
 
+
+
         //##########################################################################
         //#############################CLICKEVENTS##################################
         //##########################################################################
@@ -471,7 +471,6 @@ namespace seeshark
             }
             openFile();
         }
-
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
             deleteAll();
@@ -481,76 +480,63 @@ namespace seeshark
             editPicture(5);
             openFile();
         }
-
         private void picEdit4_mouseDown(object sender, MouseButtonEventArgs e)
         {
             editPicture(4);
             openFile();
         }
-
         private void picEdit3_mouseDown(object sender, MouseButtonEventArgs e)
         {
             editPicture(3);
             openFile();
         }
-
         private void picEdit2_mouseDown(object sender, MouseButtonEventArgs e)
         {
             editPicture(2);
             openFile();
         }
-
         private void picEdit1_mouseDown(object sender, MouseButtonEventArgs e)
         {
             editPicture(1);
             openFile();
         }
-
         private void picEdit0_mouseDown(object sender, MouseButtonEventArgs e)
         {
             editPicture(0);
             openFile();
         }
-
         private void picdel0_mouseDown(object sender, MouseButtonEventArgs e)
         {
-
             deletePic(0);
             shiftPics(0);
         }
-
         private void picdel1_mouseDown(object sender, MouseButtonEventArgs e)
         {
 
             deletePic(1);
             shiftPics(1);
         }
-
         private void picdel2_mouseDown(object sender, MouseButtonEventArgs e)
         {
             deletePic(2);
             shiftPics(2);
         }
-
         private void picdel3_mouseDown(object sender, MouseButtonEventArgs e)
         {
             deletePic(3);
             shiftPics(3);
 
         }
-
         private void picdel4_mouseDown(object sender, MouseButtonEventArgs e)
         {
             deletePic(4);
             shiftPics(4);
         }
-
         private void picdel5_mouseDown(object sender, MouseButtonEventArgs e)
         {
             deletePic(5);
             shiftPics(5);
         }
-
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
             lstAllData.Items.Clear();
@@ -559,26 +545,32 @@ namespace seeshark
             connectionString = $"Connection Timeout=5; Data Source= {datasource}; Integrated Security= true; Database= chashtag; ApplicationIntent= ReadWrite";
             loadAll();
         }
-
-        private void btnSaveEdit_Click(object sender, RoutedEventArgs e)
+        private void btnSaveEdit_Click(object sender, RoutedEventArgs e)        //mehr 
         {
-            if (wasLoaded == true)              //wenn Datensatz geladen wurde, wird EditFile funktion aufgerufen
+            if (wasLoaded == true && deleted == false)              //wenn Datensatz geladen wurde, wird EditFile funktion aufgerufen
             {
                 editFile();
             }
-            else                            //sonst Normal Upload und neuer Tupel angelegt
+            else if (deleted == true)
+            {
+                MessageBox.Show("Bilder wurden gelöscht");
+                deleted = false;
+            }
+            else if (wasLoaded == false && miniBox[0].Source != null)      //sonst Normal Upload und neuer Tupel angelegt
             {
                 uploadFile();
-
             }
-            lstAllData.Items.Clear();       //liste wird gelöscht und neu geladen mit neuem / editiertem beitrag
+            else
+            {
+                MessageBox.Show("Es wurde nichts bearbeitet");
+            }
+            lstAllData.Items.Clear();                               //liste wird gelöscht und neu geladen mit neuem / editiertem beitrag
             loadAll();
         }
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             deleteFile();
         }
-
         private void lstAllData_clicked(object sender, SelectionChangedEventArgs e)
         {
             if (lstAllData.SelectedIndex >= 0)
@@ -587,37 +579,30 @@ namespace seeshark
             }
 
         }
-
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             searchFile();
         }
-
         private void picMini0_MouseDown(object sender, MouseButtonEventArgs e)
         {
             zoomPic(0);
         }
-
         private void picMini1_mouseDown(object sender, MouseButtonEventArgs e)
         {
             zoomPic(1);
         }
-
         private void picMini2_mouseDown(object sender, MouseButtonEventArgs e)
         {
             zoomPic(2);
         }
-
         private void picMini3_mouseDown(object sender, MouseButtonEventArgs e)
         {
             zoomPic(3);
         }
-
         private void picMini4_mouseDown(object sender, MouseButtonEventArgs e)
         {
             zoomPic(4);
         }
-
         private void picMini5_mouseDown(object sender, MouseButtonEventArgs e)
         {
             zoomPic(5);

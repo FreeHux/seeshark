@@ -12,3 +12,17 @@ C:\export\C Hashtag\seeshark\seeshark\obj\Debug\seeshark.csproj.GenerateResource
 C:\export\C Hashtag\seeshark\seeshark\obj\Debug\seeshark.exe
 C:\export\C Hashtag\seeshark\seeshark\obj\Debug\seeshark.pdb
 C:\export\C Hashtag\seeshark\seeshark\obj\Debug\seeshark.csprojAssemblyReference.cache
+C:\export\C#\seeshark\seeshark\bin\Debug\seeshark.exe.config
+C:\export\C#\seeshark\seeshark\bin\Debug\seeshark.exe
+C:\export\C#\seeshark\seeshark\bin\Debug\seeshark.pdb
+C:\export\C#\seeshark\seeshark\obj\Debug\seeshark.csprojAssemblyReference.cache
+C:\export\C#\seeshark\seeshark\obj\Debug\MainWindow.g.cs
+C:\export\C#\seeshark\seeshark\obj\Debug\App.g.cs
+C:\export\C#\seeshark\seeshark\obj\Debug\seeshark_MarkupCompile.cache
+C:\export\C#\seeshark\seeshark\obj\Debug\seeshark_MarkupCompile.lref
+C:\export\C#\seeshark\seeshark\obj\Debug\MainWindow.baml
+C:\export\C#\seeshark\seeshark\obj\Debug\seeshark.g.resources
+C:\export\C#\seeshark\seeshark\obj\Debug\seeshark.Properties.Resources.resources
+C:\export\C#\seeshark\seeshark\obj\Debug\seeshark.csproj.GenerateResource.cache
+C:\export\C#\seeshark\seeshark\obj\Debug\seeshark.exe
+C:\export\C#\seeshark\seeshark\obj\Debug\seeshark.pdb
